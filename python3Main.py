@@ -5,7 +5,7 @@ import image_capture
 from azureFaceAPI_Basic import pomodoro_session_analysis
 import time
 
-session_length = 5 * 50
+session_length = 1 * 60
 session_stats = []
 
 # from stack overflow
@@ -27,7 +27,8 @@ def say_hello(**payload):
     web_client = payload['web_client']
     rtm_client = payload['rtm_client']
 
-    message = data.get('text', [])
+    global session_length
+    global session_stats
 
     if 'start' in data.get('text', []):
         channel_id = data['channel']
@@ -36,10 +37,11 @@ def say_hello(**payload):
 
         web_client.chat_postMessage(
             channel=channel_id,
-            text=f"Beginning work session!"
+            text=f"Beginning work session for %d minutes!" % (session_length / 60)
         )
+
         directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pomodoro")
-        image_capture.start_capturing(25, 2, directory)
+        image_capture.start_capturing(session_length, 5, directory)
         web_client.chat_postMessage(
             channel=channel_id,
             text=f"work session done!"
@@ -55,7 +57,7 @@ def say_hello(**payload):
             channel=channel_id,
             text=f"Starting break!"
         )
-        time.sleep(5 * 60)
+        time.sleep(5)
         web_client.chat_postMessage(
             channel=channel_id,
             text=f"Break done! enter \"Start\" to start another pomodoro"
@@ -94,11 +96,17 @@ def say_hello(**payload):
     elif 'get stats' in data.get('text', []):
         channel_id = data['channel']
         text = "stat history:\n"
-        for stat in session_stats:
-            text += str(stat * 100) + "%% unfocused\n"
+        for i, stat in enumerate(session_stats):
+            text += f"session %d: %.1f%% focused\n" % ((i + 1), stat * 100)
         web_client.chat_postMessage(
             channel=channel_id,
             text=text,
+        )
+
+        if session_stats[-1] < 1.0:
+            web_client.chat_postMessage(
+            channel=channel_id,
+            text=f"Based on your last session I recommend you decrease you work session by %.1f minutes" % ((session_length * (1 - session_stats[-1])) / 60)
         )
 
 #slack_token = os.environ["SLACK_BOT_TOKEN"]
@@ -111,7 +119,7 @@ if not os.path.isdir(image_capture.pomodoro_directory):
 if not os.path.isdir(image_capture.calibration_directory):
     os.mkdir(image_capture.calibration_directory)
 
-slack_token = "xoxb-924236022790-922171684224-8WIwjK6scsQjCKBlkGP2FcNS"
+slack_token = "xoxb-924236022790-922171684224-93nsr3E2EE9tk0zM8mA2SZIx"
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
 if __name__ == "__main__":
