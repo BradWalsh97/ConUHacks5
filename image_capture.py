@@ -3,7 +3,8 @@ import cv2
 import os
 import slack
 
-directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp_capture")
+calibration_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "calibration")
+pomodoro_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pomodoro")
 
 def start_capturing(capture_time, interval, dir):
     start_time = time.time() 
@@ -24,10 +25,5 @@ def capture_image(dir, name):
     cv2.imwrite(path, image)
     del(camera)  # so a others can use the camera as soon as possible
 
-def capture_calibration(client):
 
 
-if __name__ == "__main__":
-    if not os.path.isdir(directory):
-        os.mkdir(directory)
-    start_capturing(25, 5, directory)
