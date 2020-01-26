@@ -82,7 +82,7 @@ if not os.path.isdir(image_capture.pomodoro_directory):
 if not os.path.isdir(image_capture.calibration_directory):
     os.mkdir(image_capture.calibration_directory)
 
-slack_token = "xoxb-924236022790-922171684224-ZGnjZPLKMbTlqPFqxGKY5uBS"
+slack_token = "xoxb-924236022790-922171684224-Zm5zWG9uPWxXnX2pA2cAydmU"
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
 
