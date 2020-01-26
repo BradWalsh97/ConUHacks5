@@ -2,6 +2,7 @@ import os
 import shutil
 import slack
 import image_capture
+from azureFaceAPI_Basic import pomodoro_session_analysis
 import time
 
 session_length = 5 * 50
@@ -78,10 +79,11 @@ def say_hello(**payload):
         channel_id = data['channel']
 
         delete_contents(image_capture.pomodoro_directory)
-        image_capture.capture_image(image_capture.pomodoro_directory, "test.png")
+        image_capture.capture_image(image_capture.pomodoro_directory, "capture0.png")
+        result = pomodoro_session_analysis()
         web_client.chat_postMessage(
             channel=channel_id,
-            text=f"result: " + str(),
+            text=f"result: " + str(result),
         )
 
 #slack_token = os.environ["SLACK_BOT_TOKEN"]
@@ -94,7 +96,7 @@ if not os.path.isdir(image_capture.pomodoro_directory):
 if not os.path.isdir(image_capture.calibration_directory):
     os.mkdir(image_capture.calibration_directory)
 
-slack_token = "xoxb-924236022790-922171684224-Zm5zWG9uPWxXnX2pA2cAydmU"
+slack_token = "xoxb-924236022790-922171684224-wRB04EUeIOZPUKzOFqeRCt4k"
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
 if __name__ == "__main__":
@@ -107,7 +109,6 @@ if __name__ == "__main__":
     if not os.path.isdir(image_capture.calibration_directory):
         os.mkdir(image_capture.calibration_directory)
 
-    slack_token = "xoxb-924236022790-922171684224-Zm5zWG9uPWxXnX2pA2cAydmU"
 
 
 
