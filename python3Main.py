@@ -27,21 +27,26 @@ def say_hello(**payload):
     web_client = payload['web_client']
     rtm_client = payload['rtm_client']
 
-    if 'pomodoro start' in data.get('text', []):
+    message = data.get('text', [])
+
+    if 'start' in data.get('text', []):
         channel_id = data['channel']
 
         delete_contents(image_capture.pomodoro_directory)
 
         web_client.chat_postMessage(
             channel=channel_id,
-            text=f"Starting work session!"
+            text=f"Beginning work session!"
         )
         directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pomodoro")
-        image_capture.start_capturing(20, 5, directory)
+        image_capture.start_capturing(25, 2, directory)
         web_client.chat_postMessage(
             channel=channel_id,
-            text=f"work session done. Enter \"Break\" to start your break"
-        )    
+            text=f"work session done!"
+        )
+        result = pomodoro_session_analysis()  
+        print("result: " + str(result))
+        session_stats.append(result)
 
     elif 'break' in data.get('text', []):
         channel_id = data['channel']
@@ -86,6 +91,16 @@ def say_hello(**payload):
             text=f"result: " + str(result),
         )
 
+    elif 'get stats' in data.get('text', []):
+        channel_id = data['channel']
+        text = "stat history:\n"
+        for stat in session_stats:
+            text += str(stat * 100) + "%% unfocused\n"
+        web_client.chat_postMessage(
+            channel=channel_id,
+            text=text,
+        )
+
 #slack_token = os.environ["SLACK_BOT_TOKEN"]
 directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp_capture")
 if not os.path.isdir(directory):
@@ -96,13 +111,10 @@ if not os.path.isdir(image_capture.pomodoro_directory):
 if not os.path.isdir(image_capture.calibration_directory):
     os.mkdir(image_capture.calibration_directory)
 
-slack_token = "xoxb-924236022790-922171684224-wRB04EUeIOZPUKzOFqeRCt4k"
+slack_token = "xoxb-924236022790-922171684224-8WIwjK6scsQjCKBlkGP2FcNS"
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
 if __name__ == "__main__":
-    directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "temp_capture")
-    if not os.path.isdir(directory):
-        os.mkdir(directory)
 
     if not os.path.isdir(image_capture.pomodoro_directory):
         os.mkdir(image_capture.pomodoro_directory)
