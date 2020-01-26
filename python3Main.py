@@ -50,7 +50,7 @@ def say_hello(**payload):
         print("result: " + str(result))
         session_stats.append(result)
 
-    elif 'break' in data.get('text', []):
+    elif 'break' == data.get('text', []):
         channel_id = data['channel']
 
         web_client.chat_postMessage(
@@ -82,7 +82,7 @@ def say_hello(**payload):
             text=f"changed session length to " + str(session_length/60),
         )
 
-    elif 'test' in data.get('text', []):
+    elif 'test' == data.get('text', []):
         channel_id = data['channel']
 
         delete_contents(image_capture.pomodoro_directory)
@@ -93,7 +93,7 @@ def say_hello(**payload):
             text=f"result: " + str(result),
         )
 
-    elif 'get stats' in data.get('text', []):
+    elif 'get stats' == data.get('text', []):
         channel_id = data['channel']
         text = "stat history:\n"
         for i, stat in enumerate(session_stats):
