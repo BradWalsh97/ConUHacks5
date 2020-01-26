@@ -28,6 +28,7 @@ def say_hello(**payload):
         )
 
 #slack_token = os.environ["SLACK_BOT_TOKEN"]
-slack_token = "xoxb-924236022790-922171684224-boLaUwt35ZtvN8plCj6e12kj"
+#slack_token = "xoxb-924236022790-922171684224-boLaUwt35ZtvN8plCj6e12kj"
+slack_token = "xoxb-924236022790-922171684224-S1VbuJXNAb8mlvkph90LxJqE"
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
