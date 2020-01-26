@@ -3,9 +3,13 @@
 ## Team Members
 
 Bradley Walsh, Bradley.walsh.97@gmail.com
+
 Braedon McDonald, braedonmcdonald1@gmail.com
+
 Najib Chowdhury, nchow043@uottawa.ca
+
 Ogo-Oluwa Jesutomi Olasubulumi, tomilashy@gmail.com
+
 
 ## What it Does
 
