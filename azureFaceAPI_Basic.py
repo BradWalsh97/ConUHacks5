@@ -41,6 +41,7 @@ def analyze(image_path):
 
     image_data = open(image_path, "rb")
     subscription_key, face_api_url = cnfg.config();
+    returnArr = []
 
     headers = {'Content-Type': 'application/octet-stream',
             'Ocp-Apim-Subscription-Key': subscription_key}
@@ -56,7 +57,9 @@ def analyze(image_path):
     response = requests.post(face_api_url, params=params, headers=headers, data=image_data)
     response.raise_for_status()
     faces = response.json()
-    returnArr = []
+    if not faces:
+        return []
+    
     returnArr.append(faces[0]['faceAttributes']['headPose']['yaw'])
     returnArr.append(faces[0]['faceAttributes']['headPose']['pitch'])
 
@@ -80,8 +83,13 @@ def pomodoro_session_analysis():
         dataSet.append(analyze("pomodoro/capture" + str(i) + ".png"))
     
     for i in range(length):
-        if(dataSet[i][0] > boundries[0] and dataSet[i][0] < boundries[1] and dataSet[i][1] < boundries[2] and dataSet[i][1] > boundries[3]):
+        if(dataSet[i][0] == []):
+            continue
+        elif(dataSet[i][0] > boundries[0] and dataSet[i][0] < boundries[1] and dataSet[i][1] < boundries[2] and dataSet[i][1] > boundries[3]):
             withinScreenCount += 1
+        
+    if length == 0:
+        return 0.0
     return (withinScreenCount/length)  
     
 if __name__ == "__main__":
