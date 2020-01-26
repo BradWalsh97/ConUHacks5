@@ -19,10 +19,11 @@ def calibrate():
     
     for i in range(len(paths)):
         tmp = analyze(paths[i])
-        if i < 2:            
-            boundries[i] = tmp[0]
-        else:
-            boundries[i] = tmp[1]
+        if tmp:
+            if i < 2:            
+                boundries[i] = tmp[0]
+            else:
+                boundries[i] = tmp[1]
     
     
     # tmp = analyze(right_image_path)
@@ -83,7 +84,9 @@ def pomodoro_session_analysis():
         dataSet.append(analyze("pomodoro/capture" + str(i) + ".png"))
     
     for i in range(length):
-        if(dataSet[i][0] == []):
+        if(dataSet == []):
+            continue
+        elif(dataSet[i] == []):
             continue
         elif(dataSet[i][0] > boundries[0] and dataSet[i][0] < boundries[1] and dataSet[i][1] < boundries[2] and dataSet[i][1] > boundries[3]):
             withinScreenCount += 1
@@ -94,57 +97,3 @@ def pomodoro_session_analysis():
     
 if __name__ == "__main__":
     print(str(pomodoro_session_analysis() * 100 ) + '%')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#print(faces)
-# file = open("face.json", "w")
-# file.write(json.dumps(faces))
-# file.close()
-# print(faces[0]['faceAttributes']['headPose']['yaw'])
-#print(faces[0])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-################OLD CODE###################
-
-##Now that we have the face data as a JSON, turn it into an object
-# def _json_object_hook(d): return namedtuple('X', d.keys())(*d.values())
-# def json2obj(faces): return json.loads(faces, object_hook=_json_object_hook)
-
-# listOfFaces = []
-# object1 = json2obj(json.dumps(faces))
-#print(object1['headPose']['yaw'])
-# listOfFaces.append(object1)
-
-# print(listOfFaces[0].headPose)
-
-# for idx, item in enumerate(listOfFaces):
-#     print(listOfFaces[idx])

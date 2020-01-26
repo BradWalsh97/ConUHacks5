@@ -30,7 +30,7 @@ def say_hello(**payload):
     global session_length
     global session_stats
 
-    if 'start' in data.get('text', []):
+    if 'start' == data.get('text', []):
         channel_id = data['channel']
 
         delete_contents(image_capture.pomodoro_directory)
@@ -55,7 +55,7 @@ def say_hello(**payload):
 
         web_client.chat_postMessage(
             channel=channel_id,
-            text=f"Starting break!"
+            text=f"Starting rest period!"
         )
         time.sleep(5)
         web_client.chat_postMessage(
@@ -76,10 +76,10 @@ def say_hello(**payload):
 
     elif 'set session length' in data.get('text', []):
         channel_id = data['channel']
-        session_length = data.get('text', []).split()[3] * 60
+        session_length = int(data.get('text', []).split()[3]) * 60
         web_client.chat_postMessage(
             channel=channel_id,
-            text=f"changed session length to " + str(session_length),
+            text=f"changed session length to " + str(session_length/60),
         )
 
     elif 'test' in data.get('text', []):
@@ -119,7 +119,7 @@ if not os.path.isdir(image_capture.pomodoro_directory):
 if not os.path.isdir(image_capture.calibration_directory):
     os.mkdir(image_capture.calibration_directory)
 
-slack_token = "xoxb-924236022790-922171684224-93nsr3E2EE9tk0zM8mA2SZIx"
+slack_token = "xoxb-924236022790-922171684224-NXgEH5e6jN2QxEGVMilnhsBM"
 rtm_client = slack.RTMClient(token=slack_token)
 rtm_client.start()
 if __name__ == "__main__":
@@ -128,7 +128,3 @@ if __name__ == "__main__":
         os.mkdir(image_capture.pomodoro_directory)
     if not os.path.isdir(image_capture.calibration_directory):
         os.mkdir(image_capture.calibration_directory)
-
-
-
-
