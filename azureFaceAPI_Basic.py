@@ -88,8 +88,8 @@ def pomodoro_session_analysis():
         elif(dataSet[i][0] > boundries[0] and dataSet[i][0] < boundries[1] and dataSet[i][1] < boundries[2] and dataSet[i][1] > boundries[3]):
             withinScreenCount += 1
         
-    if length = 0:
-        return 0
+    if length == 0:
+        return 0.0
     return (withinScreenCount/length)  
     
 if __name__ == "__main__":
